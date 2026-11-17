@@ -77,7 +77,7 @@ const sky = new THREE.Mesh(new THREE.SphereGeometry(600, 32, 16), new THREE.Shad
       col += uSunCol*(smoothstep(.9991,.9994,sd)*3. + pow(max(sd,0.),700.)*.3 + pow(max(sd,0.),20.)*.06)*uSunVis;
       float md = dot(d,uMoonDir);
       col += vec3(.85,.9,1.)*(smoothstep(.9982,.9986,md)*1.4 + pow(max(md,0.),900.)*.2)*uMoonVis;
-      vec3 c = floor(d*70.); float s = hash(c);
+      vec3 c = floor(d*140.); float s = hash(c);
       col += step(.993,s)*uNight*smoothstep(.02,.2,d.y)*(.9+.5*sin(uTime*2.+s*90.))*1.6;
       gl_FragColor = vec4(col,1.);
     }`,
@@ -238,7 +238,7 @@ scene.add(hemi, sun, sun.target, moon, moon.target, fill);
 const CHARS = ' .:-=+*o#%@';
 const EDGES = '|-' + String.fromCharCode(92) + '/'; // contours : vertical, horizontal, diagonales
 const ATLAS = CHARS + EDGES;
-const CELL = { w: 7, h: 12 };
+const CELL = { w: 3.5, h: 6 };
 const rt = new THREE.WebGLRenderTarget(1, 1);
 rt.depthTexture = new THREE.DepthTexture(1, 1);
 const fontTex = new THREE.CanvasTexture(document.createElement('canvas'));
@@ -286,12 +286,13 @@ function resize() {
   asciiU.uCell.value.set(cw, ch);
   rt.setSize(Math.ceil(w / CELL.w) * 2, Math.ceil(h / CELL.h) * 2);
   const fc = fontTex.image;
-  fc.width = cw * ATLAS.length; fc.height = ch;
+  const gw = Math.ceil(cw), gh = Math.ceil(ch); // l'atlas veut des pixels entiers
+  fc.width = gw * ATLAS.length; fc.height = gh;
   const g = fc.getContext('2d');
   g.fillStyle = '#000'; g.fillRect(0, 0, fc.width, fc.height);
-  g.fillStyle = '#fff'; g.font = `${Math.round(ch * 0.92)}px ui-monospace, Menlo, Consolas, monospace`;
+  g.fillStyle = '#fff'; g.font = `${Math.round(gh * 0.92)}px ui-monospace, Menlo, Consolas, monospace`;
   g.textAlign = 'center'; g.textBaseline = 'middle';
-  [...ATLAS].forEach((c, i) => g.fillText(c, (i + 0.5) * cw, ch * 0.55));
+  [...ATLAS].forEach((c, i) => g.fillText(c, (i + 0.5) * gw, gh * 0.55));
   fontTex.needsUpdate = true;
 }
 addEventListener('resize', resize);
