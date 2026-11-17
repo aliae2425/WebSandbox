@@ -1,5 +1,4 @@
 .env
-traefik/letsencrypt/
 node_modules/
 __pycache__/
 .DS_Store

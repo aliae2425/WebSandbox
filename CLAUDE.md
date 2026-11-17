@@ -1,16 +1,15 @@
 # WebSandbox
 
-Collection de petits projets web "sandbox". Chaque projet tourne dans son propre conteneur Docker, exposé sur son propre sous-domaine via un Traefik partagé.
+Collection de petits projets web "sandbox". Chaque projet tourne dans son propre conteneur Docker, exposé sur son propre sous-domaine via le Traefik déjà en place sur le serveur de prod (hors de ce repo).
 
 ## Structure
 
 ```
-traefik/              # reverse proxy partagé (HTTPS Let's Encrypt), lancé une seule fois
 projects/<nom>/       # un dossier par projet, autonome
   Dockerfile
   docker-compose.yml
   ...code
-.env.example          # DOMAIN, ACME_EMAIL
+.env.example          # DOMAIN
 ```
 
 ## Branches
@@ -18,13 +17,21 @@ projects/<nom>/       # un dossier par projet, autonome
 - `main` = prod. Contient uniquement des projets terminés et déployables. Ce qui est sur `main` est en ligne.
 - `projet/<nom>` = une branche par projet. Tout le dev d'un projet se fait là, uniquement dans `projects/<nom>/`.
 - Mise en prod : merge de `projet/<nom>` dans `main`, puis deploy sur le serveur.
-- Ne jamais modifier un autre projet que celui de la branche courante. `traefik/` et ce fichier ne se modifient que sur `main`.
+- Ne jamais modifier un autre projet que celui de la branche courante. Ce fichier ne se modifie que sur `main`.
 
 Créer un projet :
 ```bash
 git checkout main && git checkout -b projet/<nom>
 mkdir projects/<nom>
 ```
+
+## Traefik (prod)
+
+Traefik tourne déjà en prod, il n'est pas géré ici. Paramètres à confirmer (**TODO : à transmettre**), utilisés dans le modèle ci-dessous :
+- réseau Docker externe : `web` (?)
+- entrypoint HTTPS : `websecure` (?)
+- certresolver : `le` (?)
+- domaine : `DOMAIN` (?)
 
 ## Conventions d'un projet
 
@@ -56,21 +63,10 @@ networks:
 
 ## Commandes
 
-Sur le serveur (une fois) :
-```bash
-docker network create web
-cp .env.example traefik/.env   # renseigner ACME_EMAIL
-cd traefik && docker compose up -d
-```
-
 Déployer / mettre à jour un projet :
 ```bash
 git pull
 cd projects/<nom> && docker compose --env-file ../../.env up -d --build
 ```
 
-En local : `DOMAIN=localhost` (les `*.localhost` résolvent nativement, certificat auto-signé).
-
-## DNS
-
-Un enregistrement wildcard `*.${DOMAIN}` → IP du serveur. Aucun réglage DNS par projet.
+En local : `docker compose up --build` suffit si on publie temporairement un port (`ports: ["8080:<port>"]`), à ne pas committer.
