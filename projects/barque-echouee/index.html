@@ -277,7 +277,7 @@ function makeTurtle() {
   return Object.assign(g, { legs });
 }
 const walkers = [];
-let nextSpawn = 1.5;
+let nextSpawn = 6;
 function spawn(now) {
   if (Math.random() < 0.35) { // tortue : remonte de la plage vers la mer
     const side = Math.random() < 0.5 ? -1 : 1, t = makeTurtle();
@@ -295,7 +295,7 @@ function spawn(now) {
   if (Math.random() < 0.6) squawk(now);
 }
 function updateWalkers(now, dt) {
-  if (now > nextSpawn) { nextSpawn = now + 6 + Math.random() * 12; if (walkers.length < 3) spawn(now); }
+  if (now > nextSpawn) { nextSpawn = now + 20 + Math.random() * 25; if (walkers.length < 3) spawn(now); }
   for (let i = walkers.length - 1; i >= 0; i--) {
     const w = walkers[i], u = w.userData, p = w.position;
     if (u.kind === 'crab') {
