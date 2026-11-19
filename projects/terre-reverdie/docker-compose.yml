@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    container_name: terre-reverdie
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.terre-reverdie.rule=Host(`terre-reverdie.${DOMAIN}`)
+      - traefik.http.routers.terre-reverdie.entrypoints=websecure
+      - traefik.http.routers.terre-reverdie.tls.certresolver=le
+      - traefik.http.services.terre-reverdie.loadbalancer.server.port=3000
+    networks:
+      - web
+
+networks:
+  web:
+    external: true

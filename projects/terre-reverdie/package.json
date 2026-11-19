@@ -1,0 +1,5 @@
+{
+  "name": "terre-reverdie",
+  "private": true,
+  "scripts": { "start": "node server.js" }
+}

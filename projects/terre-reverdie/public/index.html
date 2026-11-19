@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terre Reverdie</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #1b1712; color: #eadfc8; font: 14px system-ui, sans-serif; }
+  canvas { position: fixed; inset: 0; width: 100vw !important; height: 100vh !important; image-rendering: pixelated; }
+  header, #tools, #msg { position: fixed; left: 0; right: 0; display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; pointer-events: none; text-shadow: 0 1px 2px #000; }
+  header { top: 0; padding: 10px 16px; background: linear-gradient(#1b1712cc, #0000); }
+  h1 { font-size: 18px; margin: 0; letter-spacing: .05em; }
+  #seeds { font-weight: bold; color: #b9e07a; }
+  .goal { display: flex; align-items: center; gap: 6px; }
+  .bar { width: 90px; height: 8px; background: #3a3128; border-radius: 4px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: #7fbf4d; }
+  .goal.ok .bar i { background: #e8d36a; }
+  #tools { bottom: 0; gap: 6px; padding: 10px; background: linear-gradient(#0000, #1b1712cc); }
+  #tools button { pointer-events: auto; background: #2c251dee; color: inherit; border: 1px solid #4a3f33; border-radius: 6px; padding: 6px 10px; cursor: pointer; font: inherit; text-align: left; }
+  #tools button.on { border-color: #b9e07a; background: #38412aee; }
+  #tools button small { display: block; opacity: .65; font-size: 11px; }
+  #msg { top: 44px; padding: 4px 16px; }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }</script>
+</head>
+<body>
+<header>
+  <h1>TERRE REVERDIE</h1>
+  <span>Graines : <span id="seeds"></span></span>
+  <span class="goal" id="g-green">Végétation <span class="bar"><i></i></span></span>
+  <span class="goal" id="g-water">Eau <span class="bar"><i></i></span></span>
+  <span class="goal" id="g-forest">Forêt <span class="bar"><i></i></span></span>
+</header>
+<div id="msg"></div>
+<div id="tools"></div>
+<script type="module" src="game.js"></script>
+</body>
+</html>
